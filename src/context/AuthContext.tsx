@@ -71,8 +71,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const logout = (): void => {
         setUser(null);
-        console.log("User after logout:", null);
         localStorage.removeItem('token');
+        navigate('/login')
     };
 
     const getToken = (): string | null => {

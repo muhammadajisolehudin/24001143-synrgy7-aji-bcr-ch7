@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, TextField, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCarContext } from '../../../context/CarContext';
+import { toast } from 'react-toastify';
 
 enum Transmission {
   Manual = 'manual',
@@ -40,6 +41,8 @@ interface FormCarProps {
 
 const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
   // const { id } = useParams<{ id: string }>();
+  
+  const navigate = useNavigate();
   const { addCar, fetchCarById, updateCar } = useCarContext();
   const [car, setCar] = useState<Car>({
     id: initialCar?.id || '', // Tambahkan id di sini, dan pastikan tidak null atau undefined
@@ -102,21 +105,23 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
     }));
   };
 
-   const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (mode === 'add') {
         await addCar(car);
-        console.log('Car added successfully');
+        toast.success('Car added successfully');
+        navigate(-1);
       } else {
-        await updateCar(car); // Panggil fungsi updateCar dari context
-        console.log('Car updated successfully');
+        await updateCar(car);
+        toast.success('Car updated successfully');
+        navigate(-1);
       }
     } catch (error) {
-      console.error(`Failed to ${mode} car:`, error);
+      toast.error(`Failed to ${mode} car: ${error}`);
     }
   };
-  const navigate = useNavigate();
+
   const handleCancel = () => {
     navigate('/car');
   };

@@ -5,6 +5,8 @@ import Sidebar from '../../assets/components/admin/SideBar';
 import { createCustomTheme } from '../../utils/themeUtils';
 import { Box, ThemeProvider } from '@mui/material';
 import DetailSidebar from '../../assets/components/admin/DetailSidebar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,6 +36,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Box>
           </Box>
         </Box>
+        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       </Box>
     </ThemeProvider>
     

@@ -3,6 +3,7 @@ import { Box, Grid, Button, Card, CardActions, CardContent, CardMedia, Typograph
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import { useCarContext } from '../../../context/CarContext';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const CarList: React.FC = () => {
   const { cars, fetchCars, deleteCar } = useCarContext();
@@ -17,8 +18,8 @@ const CarList: React.FC = () => {
     console.log("Cars in CarList:", cars); // Tambahkan logging di sini
   }, [cars]);
 
-  const handleFilterChange = (type: string) => {
-    setFilter(type);
+  const handleFilterChange = (filter: string) => {
+    setFilter(filter);
   };
 
   const handleDeleteClick = (id: string) => {
@@ -30,9 +31,9 @@ const CarList: React.FC = () => {
     if (selectedCarId !== null) {
       try {
         await deleteCar(selectedCarId);
-        console.log(`Deleting car with id ${selectedCarId}`);
+        toast.success(`Car ${selectedCarId} delete successfully`);
       } catch (error) {
-        console.error('Failed to delete car:', error);
+        toast.error(`Failed to delete car ${selectedCarId}, car: ${error}`);
       }
     }
     setIsModalOpen(false);
@@ -50,22 +51,49 @@ const CarList: React.FC = () => {
     navigate(`/car/update/${id}`);
   }
 
-  const filteredCarData = filter === 'all' ? cars : cars.filter((car) => car.type === filter);
+  const filteredCarData = cars.filter(car => {
+    if (filter === 'all') return true;
+    if (filter === 'small') return car.capacity <= 4;
+    if (filter === 'medium') return car.capacity > 4 && car.capacity <= 7;
+    if (filter === 'large') return car.capacity > 7;
+    return true;
+  });
+
 
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Box>
-          <Button variant="outlined" color="primary" onClick={() => handleFilterChange('all')} sx={{ mr: 1 }}>
+       <Box>
+          <Button
+            variant={filter === 'all' ? 'contained' : 'outlined'}
+            color="primary"
+            onClick={() => handleFilterChange('all')}
+            sx={{ mr: 1 }}
+          >
             All
           </Button>
-          <Button variant="outlined" color="primary" onClick={() => handleFilterChange('small')} sx={{ mr: 1 }}>
+          <Button
+            variant={filter === 'small' ? 'contained' : 'outlined'}
+            color="primary"
+            onClick={() => handleFilterChange('small')}
+            sx={{ mr: 1 }}
+          >
             Small
           </Button>
-          <Button variant="outlined" color="primary" onClick={() => handleFilterChange('medium')} sx={{ mr: 1 }}>
+          <Button
+            variant={filter === 'medium' ? 'contained' : 'outlined'}
+            color="primary"
+            onClick={() => handleFilterChange('medium')}
+            sx={{ mr: 1 }}
+          >
             Medium
           </Button>
-          <Button variant="outlined" color="primary" onClick={() => handleFilterChange('large')} sx={{ mr: 1 }}>
+          <Button
+            variant={filter === 'large' ? 'contained' : 'outlined'}
+            color="primary"
+            onClick={() => handleFilterChange('large')}
+            sx={{ mr: 1 }}
+          >
             Large
           </Button>
         </Box>
