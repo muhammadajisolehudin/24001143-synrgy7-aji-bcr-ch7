@@ -31,6 +31,7 @@ interface Car {
   driver_type: DriverType;
   available: boolean;
   description?: string;
+  update_at?:string
 }
 
 interface FormCarProps {
@@ -58,6 +59,7 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
     driver_type: initialCar?.driver_type || DriverType.LepasKunci,
     available: initialCar?.available || true,
     description: initialCar?.description || '',
+    update_at: initialCar?.update_at || ''
   });
 
    useEffect(() => {
@@ -142,11 +144,11 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
       if (mode === 'add') {
         await addCar(car);
         toast.success('Car added successfully');
-        navigate(-1);
+        navigate('/car');
       } else {
         await updateCar(car);
         toast.success('Car updated successfully');
-        navigate(-1);
+        navigate('/car');
       }
     } catch (error) {
       toast.error(`Failed to ${mode} car: ${error}`);

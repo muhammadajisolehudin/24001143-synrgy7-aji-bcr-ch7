@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Box, Button } from '@mui/material';
 // import CarList from './CarList'; // Pastikan path impor sesuai dengan struktur direktori
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { useNavigate } from 'react-router-dom';
 import CarList from '../../../assets/components/admin/CarList';
 
@@ -16,10 +17,13 @@ const Car: React.FC = () => {
         <Typography variant="h5" style={{ fontWeight: 'bold' }}>
           List Car
         </Typography>
-        <Button variant="contained" color="primary"  
+        <Button variant="contained" 
+          color="primary"  
           sx={{ textTransform:'none'}} 
           onClick={handleAddCarClick}
+          className="flex items-center gap-1"
         >
+          <AddOutlinedIcon fontSize="small" />
           Add New Car
         </Button>
       </Box>

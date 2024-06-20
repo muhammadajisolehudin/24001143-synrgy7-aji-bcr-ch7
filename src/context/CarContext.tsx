@@ -30,6 +30,7 @@ interface Car {
   available: boolean;
   available_at?: string;
   description?: string;
+  updated_at?: string;
 }
 
 // interface Car {
@@ -137,6 +138,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
       formData.append('manufacture', car.manufacture);
       formData.append('model', car.model);
       if (car.img instanceof File) {
+        console.log("img path :", car.img)
         formData.append('img', car.img);
       } else {
         formData.append('img', car.img as string); // Pastikan Anda menangani string img juga
@@ -149,7 +151,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
       formData.append('driver_type', car.driver_type);
       formData.append('available', car.available.toString());
       formData.append('description', car.description || '');
-      await axios.put(`http://localhost:8000/api/v1/cars/${car.id}`, car, {
+      await axios.put(`http://localhost:8000/api/v1/cars/${car.id}`, formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },

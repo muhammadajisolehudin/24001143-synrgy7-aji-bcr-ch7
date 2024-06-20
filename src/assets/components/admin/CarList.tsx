@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Grid, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import { useCarContext } from '../../../context/CarContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { format } from 'date-fns'; 
 
 const CarList: React.FC = () => {
   const { cars, fetchCars, deleteCar } = useCarContext();
@@ -101,39 +105,47 @@ const CarList: React.FC = () => {
       <Grid container spacing={3}>
         {Array.isArray(filteredCarData) && filteredCarData.map((car) => (
           <Grid item xs={12} sm={6} md={4} key={car.id}>
-            <Card>
-              <CardMedia 
-                component="img" 
-                height="140"  
-                image={`http://localhost:8000${car.img}`} // URL gambar dengan car.img
-                alt={`${car.manufacture} ${car.model}`} />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+            <Card className="h-full align-bottom">
+            <div className="h-52 relative overflow-hidden mx-5">
+        <img
+          src={`http://localhost:8000${car.img}`}
+          alt={`${car.manufacture} ${car.model}`}
+          className="absolute inset-0 object-cover mt-8"
+        />
+      </div>
+              <CardContent className="flex flex-col gap-1">
+                <Typography variant="subtitle1" component="div">
                   {car.manufacture} {car.model}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Year: {car.year}
+                <Typography variant="subtitle1" style={{ fontWeight: 'bold', marginBottom: '8px' }}>
+                  Rp: {car.price} / hari
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Price: ${car.price}
+                <Typography variant="subtitle1" className="flex items-center gap-1">
+                  <AccessTimeIcon fontSize="small" />
+                  <span>Updated at {format(new Date(car.updated_at), "dd MMMM yyyy HH:mm")}</span>
                 </Typography>
               </CardContent>
-              <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <CardActions className="flex justify-between justify-end mb-3">
                 <Button
                   size="medium"
                   variant="outlined"
                   color="error"
-                  sx={{ flex: 1, marginLeft: '8px' }}
+                  sx={{ flex: 1, marginLeft: '8px', textTransform:'none' }}
                   onClick={() => handleDeleteClick(car.id)}
+                  className="flex gap-1"  
                 >
+                  <DeleteOutlineOutlinedIcon fontSize="small"/>
                   Delete
                 </Button>
                 <Button 
                   size="medium" 
                   color="success" 
                   variant="contained" 
-                  sx={{ flex: 1, marginRight: '8px', color: 'white' }}    
-                  onClick={() => handleUpdateCarClick(car.id)}>
+                  sx={{ flex: 1, marginRight: '8px', color: 'white', textTransform:'none' }}    
+                  onClick={() => handleUpdateCarClick(car.id)}
+                  className="flex gap-1"  
+                >
+                  <EditNoteOutlinedIcon fontSize="small"/>
                   Edit
                 </Button>
               </CardActions>
