@@ -20,7 +20,7 @@ interface Car {
   plate: string;
   manufacture: string;
   model: string;
-  img: string;
+  img?: File | string;
   price: number;
   capacity: number;
   transmission: Transmission;
@@ -103,7 +103,22 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
 
   const addCar = async (car: Omit<Car, 'id'>) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/cars', car, {
+      const formData = new FormData();
+      formData.append('plate', car.plate);
+      formData.append('manufacture', car.manufacture);
+      formData.append('model', car.model);
+      if (car.img instanceof File) {
+        formData.append('img', car.img);
+      }
+      formData.append('price', car.price.toString());
+      formData.append('capacity', car.capacity.toString());
+      formData.append('transmission', car.transmission);
+      formData.append('year', car.year.toString());
+      formData.append('type', car.type || '');
+      formData.append('driver_type', car.driver_type);
+      formData.append('available', car.available.toString());
+      formData.append('description', car.description || '');
+      const response = await axios.post('http://localhost:8000/api/v1/cars', formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`
         }
@@ -116,6 +131,24 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
 
    const updateCar = async (car: Car) => {
     try {
+      const formData = new FormData();
+      formData.append('id', car.id);
+      formData.append('plate', car.plate);
+      formData.append('manufacture', car.manufacture);
+      formData.append('model', car.model);
+      if (car.img instanceof File) {
+        formData.append('img', car.img);
+      } else {
+        formData.append('img', car.img as string); // Pastikan Anda menangani string img juga
+      }
+      formData.append('price', car.price.toString());
+      formData.append('capacity', car.capacity.toString());
+      formData.append('transmission', car.transmission);
+      formData.append('year', car.year.toString());
+      formData.append('type', car.type || '');
+      formData.append('driver_type', car.driver_type);
+      formData.append('available', car.available.toString());
+      formData.append('description', car.description || '');
       await axios.put(`http://localhost:8000/api/v1/cars/${car.id}`, car, {
         headers: {
           Authorization: `Bearer ${getToken()}`,

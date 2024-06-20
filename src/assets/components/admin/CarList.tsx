@@ -102,7 +102,11 @@ const CarList: React.FC = () => {
         {Array.isArray(filteredCarData) && filteredCarData.map((car) => (
           <Grid item xs={12} sm={6} md={4} key={car.id}>
             <Card>
-              <CardMedia component="img" height="140" image={car.img} alt={`${car.manufacture} ${car.model}`} />
+              <CardMedia 
+                component="img" 
+                height="140"  
+                image={`http://localhost:8000${car.img}`} // URL gambar dengan car.img
+                alt={`${car.manufacture} ${car.model}`} />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   {car.manufacture} {car.model}

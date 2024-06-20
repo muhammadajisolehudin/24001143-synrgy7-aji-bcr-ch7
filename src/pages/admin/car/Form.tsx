@@ -22,7 +22,7 @@ interface Car {
   plate: string;
   manufacture: string;
   model: string;
-  img: string;
+  img?: File|string;
   price: number;
   capacity: number;
   transmission: Transmission;
@@ -41,7 +41,7 @@ interface FormCarProps {
 
 const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
   // const { id } = useParams<{ id: string }>();
-  
+  const [imgPrev, setImgPrev] = useState<string>('');
   const navigate = useNavigate();
   const { addCar, fetchCarById, updateCar } = useCarContext();
   const [car, setCar] = useState<Car>({
@@ -49,7 +49,7 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
     plate: initialCar?.plate || '',
     manufacture: initialCar?.manufacture || '',
     model: initialCar?.model || '',
-    img: initialCar?.img || '',
+    img: initialCar?.img || undefined,
     price: initialCar?.price || 0,
     capacity: initialCar?.capacity || 0,
     transmission: initialCar?.transmission || Transmission.Manual,
@@ -81,13 +81,43 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
   };
 
 
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const { name, value } = e.target;
+  //   setCar((prevCar) => ({
+  //     ...prevCar,
+  //     [name]: name === 'plate' ? value.toUpperCase() : name === 'price' || name === 'capacity' || name === 'year' ? parseInt(value) : value,
+  //   }));
+  // };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setCar((prevCar) => ({
-      ...prevCar,
-      [name]: name === 'plate' ? value.toUpperCase() : name === 'price' || name === 'capacity' || name === 'year' ? parseInt(value) : value,
-    }));
+
+    if (e.target.type === 'file') {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        setCar(prevCar => ({
+          ...prevCar,
+          img: file, // Menyimpan file gambar dalam state img
+        }));
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (reader.result) {
+            setImgPrev(reader.result as string); // Menyimpan URL gambar pratinjau
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      // Handle perubahan input selain file
+      setCar(prevCar => ({
+        ...prevCar,
+        [name]: name === 'plate' ? value.toUpperCase() : name === 'price' || name === 'capacity' || name === 'year' ? parseInt(value) : value,
+      }));
+    }
   };
+
+  
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -108,6 +138,7 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+
       if (mode === 'add') {
         await addCar(car);
         toast.success('Car added successfully');
@@ -171,9 +202,11 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
             type="file"
             name="img"
             onChange={handleChange}
-            size='small'
-            className='w-[30rem]'
+            // accept="image/*"
+            size="small"
+            className="w-[30rem]"
           />
+          {imgPrev && <img src='imgPrev' alt='' />}
         </Box>
         
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
