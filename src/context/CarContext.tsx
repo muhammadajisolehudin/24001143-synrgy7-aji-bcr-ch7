@@ -1,3 +1,5 @@
+
+
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
@@ -78,7 +80,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
 
   const fetchCars = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/v1/cars', {
+      const response = await axios.get('https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/cars', {
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
@@ -91,7 +93,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
 
    const fetchCarById = useCallback(async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/cars/${id}`, {
+      const response = await axios.get(`https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/cars/${id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
@@ -119,7 +121,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
       formData.append('driver_type', car.driver_type);
       formData.append('available', car.available.toString());
       formData.append('description', car.description || '');
-      const response = await axios.post('http://localhost:8000/api/v1/cars', formData, {
+      const response = await axios.post('https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/cars', formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`
         }
@@ -151,7 +153,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
       formData.append('driver_type', car.driver_type);
       formData.append('available', car.available.toString());
       formData.append('description', car.description || '');
-      await axios.put(`http://localhost:8000/api/v1/cars/${car.id}`, formData, {
+      await axios.put(`https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/cars/${car.id}`, formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
@@ -164,7 +166,7 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
 
   const deleteCar = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8000/api/v1/cars/${id}`, {
+      await axios.delete(`https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/cars/${id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`
         }

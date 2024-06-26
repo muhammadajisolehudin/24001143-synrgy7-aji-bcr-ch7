@@ -42,7 +42,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/login', { username, password });
+            const response = await axios.post('https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/login', { username, password });
             const data = response.data;
             const userData: User = { name: data.user.username, role: data.user.role };
             setUser(userData);
