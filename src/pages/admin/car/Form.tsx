@@ -143,11 +143,9 @@ const FormCar: React.FC<FormCarProps> = ({ initialCar, mode, carId }) => {
 
       if (mode === 'add') {
         await addCar(car);
-        toast.success('Car added successfully');
         navigate('/car');
       } else {
         await updateCar(car);
-        toast.success('Car updated successfully');
         navigate('/car');
       }
     } catch (error) {

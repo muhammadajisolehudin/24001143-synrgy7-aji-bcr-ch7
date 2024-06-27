@@ -35,7 +35,7 @@ const CarList: React.FC = () => {
     if (selectedCarId !== null) {
       try {
         await deleteCar(selectedCarId);
-        toast.success(`Car ${selectedCarId} delete successfully`);
+        // toast.success(`Car ${selectedCarId} delete successfully`);
       } catch (error) {
         toast.error(`Failed to delete car ${selectedCarId}, car: ${error}`);
       }
@@ -108,7 +108,7 @@ const CarList: React.FC = () => {
             <Card className="h-full align-bottom">
             <div className="h-52 relative overflow-hidden mx-5">
         <img
-          src={`http://localhost:8000${car.img}`}
+          src={`https://due-erinna-synergy-7-e0b5f09d.koyeb.app${car.img}`}
           alt={`${car.manufacture} ${car.model}`}
           className="absolute inset-0 object-cover mt-8"
         />
@@ -122,7 +122,7 @@ const CarList: React.FC = () => {
                 </Typography>
                 <Typography variant="subtitle1" className="flex items-center gap-1">
                   <AccessTimeIcon fontSize="small" />
-                  <span>Updated at {format(new Date(car.updated_at), "dd MMMM yyyy HH:mm")}</span>
+                  <span>Updated at {car.updated_at ? format(new Date(car.updated_at), "dd MMMM yyyy HH:mm") : "N/A"}</span>
                 </Typography>
               </CardContent>
               <CardActions className="flex justify-between justify-end mb-3">

@@ -8,12 +8,13 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { ListItemButton } from '@mui/material';
 
 interface SidebarProps {
   onMenuSelect: (menu: string) => void;
 }
 
-const StyledListItem = styled(ListItem)<{ isActive: boolean }>(({ theme, isActive }) => ({
+const StyledListItemButton = styled(ListItemButton)<{ isActive: boolean }>(({ theme, isActive }) => ({
   backgroundColor: isActive ? theme.palette.secondary.main : 'inherit',
   '&:hover': {
     backgroundColor: isActive ? theme.palette.secondary.main : theme.palette.action.hover,
@@ -63,8 +64,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onMenuSelect }) => {
         <ListItem className="flex flex-col items-center mb-2">
           <div className="h-[34px] w-[34px] bg-secondary"></div>
         </ListItem>
-        <StyledListItem
-          button
+        <StyledListItemButton
+
           isActive={activeMenu === 'Dashboard'}
           className="flex flex-col items-center"
           onClick={() => handleMenuClick('Dashboard')}
@@ -75,9 +76,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onMenuSelect }) => {
               Dashboard
             </Typography>
           </ListItemIcon>
-        </StyledListItem>
-        <StyledListItem
-          button
+        </StyledListItemButton>
+        <StyledListItemButton
           isActive={activeMenu === 'Car'}
           className="flex flex-col items-center"
           onClick={() => handleMenuClick('Car')}
@@ -88,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onMenuSelect }) => {
               Car
             </Typography>
           </ListItemIcon>
-        </StyledListItem>
+        </StyledListItemButton>
       </List>
     </Drawer>
   );

@@ -1,41 +1,26 @@
-import React, { useState } from 'react';
-import { DataGrid, GridColDef, GridToolbar, GridPaginationModel } from '@mui/x-data-grid';
-import { Box, TextField, MenuItem, Button } from '@mui/material';
-
-interface Car {
-  id: number;
-  brand: string;
-  model: string;
-  year: number;
-}
-
-const carData: Car[] = [
-  { id: 1, brand: 'Toyota', model: 'Camry', year: 2021 },
-  { id: 2, brand: 'Honda', model: 'Accord', year: 2020 },
-  { id: 3, brand: 'Ford', model: 'Mustang', year: 2019 },
-  // Add more car data as needed
-];
-
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'brand', headerName: 'Brand', width: 150 },
-  { field: 'model', headerName: 'Model', width: 150 },
-  { field: 'year', headerName: 'Year', width: 110 },
-];
+import React, { useEffect, useState } from 'react';
+import { Box, Button, MenuItem, TextField } from '@mui/material';
+import { DataGrid, GridToolbar, GridPaginationModel } from '@mui/x-data-grid';
+import { useCarContext } from '../../../context/CarContext'; // Pastikan path-nya sesuai
 
 const CarTable: React.FC = () => {
+  const { cars, fetchCars } = useCarContext();
   const [pageSize, setPageSize] = useState<number>(5);
   const [page, setPage] = useState<number>(0);
   const [jumpPage, setJumpPage] = useState<string>('');
 
+  useEffect(() => {
+    fetchCars();
+  }, [fetchCars]);
+
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPageSize(parseInt(event.target.value, 10));
-    setPage(0); // Reset page to 0 when page size changes
+    setPage(0); // Reset halaman ke 0 saat ukuran halaman berubah
   };
 
   const handleJumpToPage = () => {
     const pageNum = parseInt(jumpPage, 10) - 1;
-    if (pageNum >= 0 && pageNum < Math.ceil(carData.length / pageSize)) {
+    if (pageNum >= 0 && pageNum < Math.ceil(cars.length / pageSize)) {
       setPage(pageNum);
     }
   };
@@ -44,6 +29,18 @@ const CarTable: React.FC = () => {
     setPageSize(paginationModel.pageSize);
     setPage(paginationModel.page);
   };
+
+  const columns = [
+    { field: 'plate', headerName: 'Plate', width: 150 },
+    { field: 'manufacture', headerName: 'Manufacture', width: 150 },
+    { field: 'model', headerName: 'Model', width: 150 },
+    { field: 'price', headerName: 'Price', width: 100 },
+    { field: 'capacity', headerName: 'Capacity', width: 100 },
+    { field: 'transmission', headerName: 'Transmission', width: 150 },
+    { field: 'year', headerName: 'Year', width: 100 },
+    { field: 'driver_type', headerName: 'Driver Type', width: 150 },
+    { field: 'available', headerName: 'Available', width: 100 },
+  ];
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -83,16 +80,16 @@ const CarTable: React.FC = () => {
         </Box>
       </Box>
       <DataGrid
-        rows={carData}
+        rows={cars}
         columns={columns}
         pagination
         paginationMode="client"
         pageSizeOptions={[5, 10, 20, 50, 100]}
-        rowCount={carData.length}
+        rowCount={5}
         paginationModel={{ pageSize, page }}
         onPaginationModelChange={handlePaginationModelChange}
-        components={{
-          Toolbar: GridToolbar,
+        slots={{
+          toolbar: GridToolbar,
         }}
       />
     </Box>

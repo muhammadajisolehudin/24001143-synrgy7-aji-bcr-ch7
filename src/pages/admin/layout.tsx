@@ -1,4 +1,3 @@
-// Layout.tsx
 import React, { useState } from 'react';
 import Navbar from '../../assets/components/admin/NavBar';
 import Sidebar from '../../assets/components/admin/SideBar';
@@ -14,11 +13,12 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const theme = createCustomTheme();
-  const [selectedMenu, setSelectedMenu] = useState<string>('Dashboard');
+  const [_selectedMenu, setSelectedMenu] = useState<string>('Dashboard');
 
   const handleMenuSelect = (menu: string) => {
     setSelectedMenu(menu);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex' }}>
@@ -27,9 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Navbar />
           <Box sx={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }}>
             <Box sx={{ width: 230, flexShrink: 0 }}>
-              <DetailSidebar menu={selectedMenu} onSubMenuSelect={function (): void {
-                throw new Error('Function not implemented.');
-              } } />
+              <DetailSidebar onSubMenuSelect={handleMenuSelect} />
             </Box>
             <Box sx={{ flexGrow: 1, p: 3, bgcolor: '#f4f5f7' }}>
               {children}
@@ -39,7 +37,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       </Box>
     </ThemeProvider>
-    
   );
 };
 
