@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 
 const Navbar: React.FC = () => {
   // Contoh state untuk menangani toggle menu di versi mobile
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Function untuk toggle menu di versi mobile
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // const toggleMenu = () => {
+  //   setIsMenuOpen(!isMenuOpen);
+  // };
 
   return (
     <div id="navigation" className="flex justify-between items-center w-full">

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import img_car from'../../img/img_car.png'
 
 const Header = () => {
