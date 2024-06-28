@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IconButton, InputBase, Button } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 
 interface SearchBarProps {
   placeholder?: string;
-  onSubmit?: () => void; // Tambahkan prop onSubmit untuk menangani pengiriman pencarian
+  onSubmit?: (query: string) => void; // Tambahkan prop onSubmit dengan parameter query
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder = 'Search...', onSubmit }) => {
+  const [query, setQuery] = useState<string>('');
+
   const handleSearchSubmit = () => {
     if (onSubmit) {
-      onSubmit();
+      onSubmit(query); // Kirim nilai query ke onSubmit
     }
   };
 
@@ -25,6 +27,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder = 'Search...', onSubm
       <InputBase
         placeholder={placeholder}
         sx={{ height: 36, ml: 1 }}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
       />
       <Button color="primary" variant="outlined" onClick={handleSearchSubmit}  sx={{ height: '100%', borderWidth: '2px',textTransform: 'none'}}>Search</Button> 
     </div>

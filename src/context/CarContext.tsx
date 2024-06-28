@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
+import { toast } from 'react-toastify';
 
 enum Transmission {
   Manual = 'manual',
@@ -58,6 +59,7 @@ interface CarContextProps {
   addCar: (car: Omit<Car, 'id'>) => Promise<void>;
   updateCar: (car: Car) => Promise<void>;
   deleteCar: (id: string) => Promise<void>;
+  searchCars: (query: string, searchBy: 'plate' | 'manufacture' | 'model' | 'year') => void; 
 }
 
 const CarContext = createContext<CarContextProps | undefined>(undefined);
@@ -127,8 +129,10 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
         }
       });
       setCars((prevCars) => [...prevCars, response.data]);
+      toast.success('Car added successfully');
     } catch (error) {
       console.error('Failed to add car:', error);
+      toast.error(`Failed to add car: ${error}`);
     }
   };
 
@@ -159,8 +163,10 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
         },
       });
       setCars((prevCars) => prevCars.map((c) => (c.id === car.id ? car : c)));
+      toast.success('Car updated successfully');
     } catch (error) {
       console.error('Failed to update car:', error);
+      toast.error(`Failed to update car: ${error}`);
     }
   };
 
@@ -172,13 +178,27 @@ export const CarProvider: React.FC<CarProviderProps> = ({ children }) => {
         }
       });
       setCars((prevCars) => prevCars.filter((car) => car.id !== id));
+      toast.success('Car deleted successfully');
     } catch (error) {
-      console.error('Failed to delete car:', error);
+      toast.error(`Failed to delete car: ${error}`);
+    }
+  };
+
+  const searchCars = async (query: string, searchBy: 'plate' | 'manufacture' | 'model' | 'year') => {
+    try {
+      const response = await axios.get(`https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/cars/search?${searchBy}=${query}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+      setCars(response.data.data.cars);
+    } catch (error) {
+      console.error('Failed to search cars:', error);
     }
   };
 
   return (
-    <CarContext.Provider value={{ cars, fetchCars, fetchCarById, addCar, updateCar, deleteCar }}>
+    <CarContext.Provider value={{ cars, fetchCars, fetchCarById, addCar, updateCar, deleteCar, searchCars }}>
       {children}
     </CarContext.Provider>
   );

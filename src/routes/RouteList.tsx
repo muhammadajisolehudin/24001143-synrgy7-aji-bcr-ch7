@@ -6,6 +6,8 @@ import Dashboard from '../pages/admin/dashboard';
 import Car from '../pages/admin/car';
 import TokenProtected from '../assets/components/Protected/TokenProtected';
 import { CarProvider } from '../context/CarContext';
+import DashboardCustomer from '../pages/cutomer/DashboardCustomer';
+import RentalPage from '../pages/cutomer/RentalPage';
 
 export const RouteList: React.FC = () => {
   return (
@@ -30,7 +32,11 @@ export const RouteList: React.FC = () => {
               </TokenProtected>
             }
           />
+
+          <Route path="/customer/dahsboard" element={<DashboardCustomer/>}/>
+          <Route path="/customer/reltal" element={<RentalPage />}/>
         </Routes>
+
       </UserProvider>
     </BrowserRouter>
   );

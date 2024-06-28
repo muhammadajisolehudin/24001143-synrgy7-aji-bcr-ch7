@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, Box } 
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import SearchBar from './SearchBar';
 import { useAuth } from '../../../context/AuthContext';
+import { useCarContext } from '../../../context/CarContext';
 
 
 const Navbar: React.FC = () => {
@@ -24,6 +25,13 @@ const Navbar: React.FC = () => {
     handleMenuClose();
   };
 
+  const { searchCars } = useCarContext();
+
+  const handleSearchSubmit = (query: string) => {
+    // Lakukan pencarian berdasarkan plate
+    searchCars(query, 'manufacture'); // Ganti 'plate' dengan jenis pencarian yang sesuai ('manufacture', 'model', 'year', dll.)
+  };
+
   return (
     <AppBar position="static" color="inherit" elevation={1}>
       <Toolbar className='justify-between'>
@@ -32,7 +40,7 @@ const Navbar: React.FC = () => {
         </Box>
 
         <Box className='flex flex-row'>
-          <SearchBar placeholder="Search..." />
+          <SearchBar onSubmit={handleSearchSubmit} />
           <Box sx={{ display: 'inline-flex', gap: '10px', alignItems: 'center' }}>
             <Avatar sx={{ bgcolor: 'secondary.main' }}>{user?.name?.charAt(0) || 'U'}</Avatar>
             <Typography variant="body1" color="initial">{user?.name || 'User Name'}</Typography>
