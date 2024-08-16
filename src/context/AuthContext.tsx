@@ -38,36 +38,35 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const navigate = useNavigate();
 
-    const login = async (username: string, password: string): Promise<void> => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await axios.post('https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/login', { username, password });
-            const data = response.data;
-            const userData: User = { name: data.user.username, role: data.user.role };
-            setUser(userData);
-            console.log("User after login:", userData);
-            localStorage.setItem('token', data.token);
+ const login = async (username: string, password: string): Promise<void> => {
+    setLoading(true);
+    setError(null);
+    try {
+        const response = await axios.post('https://due-erinna-synergy-7-e0b5f09d.koyeb.app/api/v1/login', { username, password });
+        const data = response.data;
+        const userData: User = { name: data.user.username, role: data.user.role };
+        localStorage.setItem('token', data.token);
+        setUser(userData); // Pastikan setUser dipanggil sebelum navigate
 
-            if (userData.role === 'admin' || userData.role === 'super admin') {
-                navigate("/dashboard");
-            } else if (userData.role === 'member') {
-                navigate("/member/index");
-            } else {
-                setError('Unknown user role');
-            }
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                setError(err.response ? err.response.data.message : 'Failed to login');
-            } else if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
-        } finally {
-            setLoading(false);
+        if (userData.role === 'admin' || userData.role === 'super admin') {
+            navigate("/admin/dashboard");
+        } else if (userData.role === 'member') {
+            navigate("/customer/rental");
+        } else {
+            setError('Unknown user role');
         }
-    };
+    } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+            setError(err.response ? err.response.data.message : 'Failed to login');
+        } else if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError('An unknown error occurred');
+        }
+    } finally {
+        setLoading(false);
+    }
+};
 
     const logout = (): void => {
         setUser(null);
